@@ -29,7 +29,7 @@
                                                         <span class="caption blue--text">Forgot password</span>
                                                     </v-col> 
                                                     </v-row>-->
-                                                    <v-btn color="blue" dark block tile>Log in</v-btn>
+                                                    <v-btn color="blue" @click="submitForm" dark block tile>Log in</v-btn>
 
                                                     <!-- <h5 class="text-center  grey--text mt-4 mb-3">Or Log in using</h5>
                                                 <div class="d-flex  justify-space-between align-center mx-10 mb-16">
@@ -185,8 +185,10 @@ export default {
     },
     methods: {
         submitForm() {
-            if(this.email && this.password) {
-                this.$store.dispatch('login', {email: this.email, password: this.password})
+            if (this.email && this.password) {
+                this.$store.dispatch('login', { email: this.email, password: this.password })
+            } else {
+                this.$store.dispatch('showSnackbar', { text: 'Please fill in all fields', color: 'error' })
             }
         },
         swithAuthMode() {

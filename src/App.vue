@@ -2,7 +2,7 @@
   <!-- App.vue -->
   <!-- <router-view :to="/auth"></router-view> -->
   <v-app id="app">
-    <v-navigation-drawer v-show="this.$store.state.isAuthenticated" v-model="drawer" app>
+    <v-navigation-drawer v-if="isAuthenticated" v-model="drawer" app>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6 mt-4"> Task Taker</v-list-item-title>
@@ -21,7 +21,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar color="teal-darken-4" height="80" image="stars.jpg">
+    <v-app-bar v-if="isAuthenticated" color="teal-darken-4" height="80" image="stars.jpg">
       <template v-slot:image>
         <v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>
       </template>
@@ -54,12 +54,16 @@
   </v-app>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { useStore } from 'vuex';
+import { ref, onMounted, computed } from 'vue'
 // import { RouterView } from 'vue-router'
+const store = useStore()
 onMounted(() => {
   console.log('mounted')
-  // console.log(this.$store.state.isAuthenticated);
+  console.log(store.state.isAuthenticated);
+  console.log(store.state.token);
 })
+const isAuthenticated = computed(() => store.getters.isAuthenticated)
 const drawer = ref(null)
 let items = ref([
   { title: 'TODO', icon: 'mdi-format-list-checks', value: '/' },
