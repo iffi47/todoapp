@@ -28,7 +28,7 @@
 <script setup>
 import axios from "axios";
 import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router"
+// import { useRouter } from "vue-router"
 import { API_URL } from '../api'
 let tasks = ref([
 
@@ -38,7 +38,7 @@ onMounted(async () => {
     tasks.value = res.data
     // console.log(res.data);
 })
-const router = useRouter()
+// const router = useRouter()
 let taskTitle = ref("");
 let colorClass = ref(false)
 const doneTask = function (id) {

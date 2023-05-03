@@ -8,7 +8,7 @@ const store = createStore({
     // Your state properties go here
     user: null,
     authToken: null,
-    isAuthenticated: true
+    isAuthenticated: false
   },
   mutations: {
     // Your mutation functions go here
@@ -54,7 +54,6 @@ const store = createStore({
       commit('setAuthToken', authToken)
     },
     async logout({ commit }) {
-      localStorage.removeItem('authToken')
       commit('logout')
     },
     // async login({ commit }, { email, password }) {

@@ -2,7 +2,7 @@
   <!-- App.vue -->
   <!-- <router-view :to="/auth"></router-view> -->
   <v-app id="app">
-    <v-navigation-drawer v-if="isAuthenticated" v-model="drawer" app>
+    <v-navigation-drawer v-if="authentication" v-model="drawer" app>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6 mt-4"> Task Taker</v-list-item-title>
@@ -21,7 +21,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar v-if="isAuthenticated" color="teal-darken-4" height="80" image="stars.jpg">
+    <v-app-bar v-if="authentication" color="teal-darken-4" height="80" image="stars.jpg">
       <template v-slot:image>
         <v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>
       </template>
@@ -63,19 +63,23 @@ const store = useStore()
 const router = useRouter()
 onMounted(() => {
 
-  if (!store.state.isAuthenticated) {
+  if (store.state.isAuthenticated && localStorage.getItem('authToken')) {
+    console.log(store.state.isAuthenticated);
     router.push('/')
   } else {
     router.push('/auth')
+    console.log(store.state.isAuthenticated);
   }
 });
-
+const authentication = computed(() => store.getters.isAuthenticated)
 const logout = function () {
-  store.commit('logout')
+  localStorage.removeItem('authToken')
+  store.dispatch('logout')
+  // store.commit('logout')
   router.push('/auth')
 }
 
-const isAuthenticated = computed(() => store.getters.isAuthenticated)
+// const isAuthenticated = computed(() => store.getters.isAuthenticated)
 const drawer = ref(null)
 let items = ref([
   { title: 'TODO', icon: 'mdi-format-list-checks', value: '/' },
