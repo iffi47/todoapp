@@ -187,6 +187,7 @@ export default {
         submitForm() {
             if (this.email && this.password) {
                 this.$store.dispatch('login', { email: this.email, password: this.password })
+                this.$router.push({ name: 'TodoView' })
             } else {
                 this.$store.dispatch('showSnackbar', { text: 'Please fill in all fields', color: 'error' })
             }

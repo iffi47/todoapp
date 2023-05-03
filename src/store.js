@@ -4,34 +4,68 @@ import { API_URL } from './api'
 const store = createStore({
   state: {
     // Your state properties go here
-    token: '',
+    user: null,
+    authToken: null,
     isAuthenticated: true
   },
   mutations: {
     // Your mutation functions go here
-    setToken(state, token) {
-      state.token = token
-    },
+    // setToken(state, token) {
+    //   state.token = token
+    // },
     setSnackbar(state, { text, color }) {
       state.snackbar.text = text
       state.snackbar.color = color
       state.snackbar.showing = true
+    },
+    setUser(state, user) {
+      state.user = user
+    },
+    setAuthToken(state, authToken) {
+      state.authToken = authToken
+    },
+    logout(state) {
+      state.user = null
+      state.authToken = null
     }
+    // isAuthenticated(state) {
+    //   return !!state.token
+    // }
   },
   actions: {
     // Your action functions go here
-    async login({ commit }, { email, password }) {
-      const response = await axios.post(`${API_URL}users`, {
-        email,
-        password
-      })
-
-      const token = response.data.token
-
-      commit('setToken', token)
-      console.log(response.data)
-      commit()
+    async login({ commit }, credentials) {
+      const response = await axios.post(`${API_URL}users`, credentials)
+      const { user, authToken } = response.data
+      // console.log(response.data)
+      // console.log(response.data.user)
+      commit('setUser', user)
+      commit('setAuthToken', authToken)
+      localStorage.setItem('authToken', authToken)
     },
+    async signup({ commit }, userInfo) {
+      const response = await axios.post(`${API_URL}users`, userInfo)
+      const user = response.data.user
+      const authToken = response.data.authToken
+      commit('setUser', user)
+      commit('setAuthToken', authToken)
+    },
+    async logout({ commit }) {
+      localStorage.removeItem('authToken')
+      commit('logout')
+    },
+    // async login({ commit }, { email, password }) {
+    //   const response = await axios.post(`${API_URL}users`, {
+    //     email,
+    //     password
+    //   })
+
+    //   const token = response.data.token
+
+    //   commit('setToken', token)
+    //   console.log(response.data)
+    //   commit()
+    // },
     showSnackbar({ commit }, { text, color }) {
       commit('setSnackbar', { text, color })
     }

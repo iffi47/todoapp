@@ -16,6 +16,8 @@
                     <template v-slot:append>
                         <v-btn @click.stop="deleteTask(task.id)" color="red-lighten-1" icon="mdi-delete"
                             variant="text"></v-btn>
+                        <v-btn @click.stop="editTask(task.id)" color="blue-lighten-1" icon="mdi-pencil"
+                            variant="text"></v-btn>
                     </template>
                     <!-- <v-spacer></v-spacer> -->
                 </v-list-item>
@@ -25,27 +27,19 @@
     </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import axios from "axios";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router"
+import { API_URL } from '../api'
 let tasks = ref([
-    {
-        id: 1,
-        title: 'This is task 1',
-        createdAt: Date.now(),
-        status: true
-    },
-    {
-        id: 2,
-        title: 'This is task 1',
-        createdAt: Date.now(),
-        status: false
-    },
-    {
-        id: 3,
-        title: 'This is task 1',
-        createdAt: Date.now(),
-        status: true
-    }
+
 ]);
+onMounted(async () => {
+    let res = await axios.get(`${API_URL}tasks`)
+    tasks.value = res.data
+    // console.log(res.data);
+})
+const router = useRouter()
 let taskTitle = ref("");
 let colorClass = ref(false)
 const doneTask = function (id) {
@@ -54,11 +48,26 @@ const doneTask = function (id) {
     task.status = !task.status
     colorClass.value = task.status
 }
+const editTask = function (id) {
+    router.push(`/edit/${id}`)
+}
 const deleteTask = function (id) {
-    this.tasks = this.tasks.filter(task => task.id !== id)
+    axios.delete(`${API_URL}tasks/${id}`).then(res => {
+        console.log(res.data);
+        this.tasks = this.tasks.filter(task => task.id !== id)
+    })
 }
 const addTask = function () {
     // console.log(this.taskTitle);
+    axios.post(`${API_URL}tasks`, {
+        title: this.taskTitle,
+        createdAt: Date.now(),
+        status: false
+    }).then(res => {
+        // console.log(res.data);
+        this.tasks.push(res.data)
+        this.taskTitle = ""
+    })
     let newTask = {
         id: this.tasks.length + 1,
         title: this.taskTitle,
