@@ -8,7 +8,7 @@
                             <h1 class="text-center">Edit Task</h1>
                         </v-card-title>
                         <v-card-text>
-                            <v-text-field v-model="taskTitle" label="Task Title"></v-text-field>
+                            <v-text-field v-model="task.title" label="Task Title"></v-text-field>
                         </v-card-text>
                         <v-card-actions>
                             <v-btn color="primary" @click="editTask(task.id)">Edit</v-btn>
@@ -23,7 +23,9 @@
 import axios from "axios";
 import { ref, onMounted } from "vue";
 import { API_URL } from '../api'
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
+const route = useRoute()
+const router = useRouter()
 let task = ref(
     {
         id: 0,
@@ -31,23 +33,31 @@ let task = ref(
         createdAt: "",
         status: false
     });
-const router = useRouter()
-let taskTitle = ref("");
+
+
 onMounted(async () => {
-    let res = await axios.get(`${API_URL}tasks/` + router.params.id)
+    console.log(route.params + " from edit");
+    let res = await axios.get(`${API_URL}tasks/` + route.params.id)
     task.value = res.data
     // console.log(res.data);
 })
 const editTask = function (id) {
-    let task = this.tasks.filter(task => task.id === id)[0]
-    // console.log(task);
-    taskTitle.value = task.title
     axios.put(`${API_URL}tasks/${id}`, {
-        title: taskTitle.value,
-        status: task.status
+        title: this.task.title,
+        createdAt: Date.now(),
+        status: false
     }).then(res => {
         console.log(res.data);
-        taskTitle.value = ""
+        this.task = res.data
     })
+    router.push("/")
+    // let newTask = {
+    //     id: this.tasks.length + 1,
+    //     title: this.taskTitle,
+    //     createdAt: Date.now(),
+    //     status: false
+    // }
+    // this.tasks.push(newTask)
+    // this.taskTitle = ""
 }
 </script>

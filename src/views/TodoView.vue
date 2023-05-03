@@ -16,8 +16,7 @@
                     <template v-slot:append>
                         <v-btn @click.stop="deleteTask(task.id)" color="red-lighten-1" icon="mdi-delete"
                             variant="text"></v-btn>
-                        <v-btn @click.stop="editTask(task.id)" color="blue-lighten-1" icon="mdi-pencil"
-                            variant="text"></v-btn>
+                        <v-btn :to="'/editTask/' + task.id" color="blue-lighten-1" icon="mdi-pencil" variant="text"></v-btn>
                     </template>
                     <!-- <v-spacer></v-spacer> -->
                 </v-list-item>
@@ -48,9 +47,9 @@ const doneTask = function (id) {
     task.status = !task.status
     colorClass.value = task.status
 }
-const editTask = function (id) {
-    router.push(`/edit/${id}`)
-}
+// const editTask = function (id) {
+//     router.push(`/editTask/${id}`)
+// }
 const deleteTask = function (id) {
     axios.delete(`${API_URL}tasks/${id}`).then(res => {
         console.log(res.data);

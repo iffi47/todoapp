@@ -1,6 +1,8 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
+// import { useRouter } from 'vue-router'
 import { API_URL } from './api'
+// const router = useRouter()
 const store = createStore({
   state: {
     // Your state properties go here
@@ -27,6 +29,7 @@ const store = createStore({
     logout(state) {
       state.user = null
       state.authToken = null
+      state.isAuthenticated = false
     }
     // isAuthenticated(state) {
     //   return !!state.token
@@ -73,7 +76,7 @@ const store = createStore({
   getters: {
     // Your getter functions go here
     isAuthenticated(state) {
-      return !!state.token
+      return !!state.authToken
     }
   }
 })
