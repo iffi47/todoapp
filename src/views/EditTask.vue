@@ -21,12 +21,12 @@
 </template>
 <script setup>
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { API_URL } from '../api'
 import { useRoute, useRouter } from "vue-router"
 const route = useRoute()
 const router = useRouter()
-let task = ref(
+const task = ref(
     {
         id: 0,
         title: "",
@@ -39,18 +39,20 @@ onMounted(async () => {
     console.log(route.params + " from edit");
     let res = await axios.get(`${API_URL}tasks/` + route.params.id)
     task.value = res.data
-    // console.log(res.data);
+    console.log(res.data);
 })
 const editTask = function (id) {
     axios.put(`${API_URL}tasks/${id}`, {
         title: this.task.title,
-        createdAt: Date.now(),
-        status: false
-    }).then(res => {
-        console.log(res.data);
-        this.task = res.data
+        createdAt: this.task.createdAt,
+        status: this.task.status
+    }).then((res) => {
+        console.log(res);
+        router.push("/")
+    }).catch((err) => {
+        console.log(err);
     })
-    router.push("/")
+
     // let newTask = {
     //     id: this.tasks.length + 1,
     //     title: this.taskTitle,
@@ -58,6 +60,5 @@ const editTask = function (id) {
     //     status: false
     // }
     // this.tasks.push(newTask)
-    // this.taskTitle = ""
 }
 </script>
