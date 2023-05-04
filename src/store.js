@@ -8,7 +8,7 @@ const store = createStore({
     // Your state properties go here
     user: null,
     authToken: null,
-    isAuthenticated: false
+    isAuthenticated: true
   },
   mutations: {
     // Your mutation functions go here
