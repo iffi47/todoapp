@@ -2,7 +2,7 @@
   <!-- App.vue -->
   <!-- <router-view :to="/auth"></router-view> -->
   <v-app id="app">
-    <v-navigation-drawer v-if="store.getters.isAuthenticated" v-model="drawer" app>
+    <v-navigation-drawer v-if="store.state.isAuthenticated" v-model="drawer" app>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6 mt-4"> Task Taker</v-list-item-title>
@@ -21,7 +21,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar v-if="store.getters.isAuthenticated" color="teal-darken-4" height="80" image="stars.jpg">
+    <v-app-bar v-if="store.state.isAuthenticated" color="teal-darken-4" height="80" image="stars.jpg">
       <template v-slot:image>
         <v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>
       </template>
@@ -65,10 +65,14 @@ onMounted(() => {
 
   if (localStorage.getItem('authToken')) {
     console.log(store.state.isAuthenticated);
-    store.state.isAuthenticated = true
+    // store.state.isAuthenticated = true
+    console.log(!!localStorage.getItem('authToken'));
+    store.commit('setAuthenticated', !!localStorage.getItem('authToken'))
     router.push('/')
   } else {
+    store.commit('setAuthenticated', !!localStorage.getItem('authToken'))
     router.push('/auth')
+
     console.log(store.state.isAuthenticated);
   }
 });

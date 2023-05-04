@@ -11,7 +11,7 @@
                                         <h4 class="text-center">Login in to Your Account</h4>
                                         <h6 class="text-center  text-grey ">Log in to your account so you can continue
                                             builiding <br>and editing your onboarding flows</h6>
-                                        <v-form v-model="valid">
+                                        <v-form v-model="valid" @keyup.enter="submitForm" @submit.prevent="submitForm">
                                             <v-row align="center" justify="center">
                                                 <v-col cols="12" sm="8">
 
@@ -29,8 +29,7 @@
                                                         <span class="caption blue--text">Forgot password</span>
                                                     </v-col> 
                                                     </v-row>-->
-                                                    <v-btn color="blue" @keyup.enter="submitForm" @click="submitForm" dark
-                                                        block tile>Log in</v-btn>
+                                                    <v-btn color="blue" @click="submitForm" dark block tile>Log in</v-btn>
 
                                                     <!-- <h5 class="text-center  grey--text mt-4 mb-3">Or Log in using</h5>
                                                 <div class="d-flex  justify-space-between align-center mx-10 mb-16">
