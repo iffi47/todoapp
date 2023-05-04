@@ -56,7 +56,7 @@
 </template>
 <script setup>
 import { useStore } from 'vuex';
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, } from 'vue'
 import { useRouter } from 'vue-router'
 // import { RouterView } from 'vue-router'
 const store = useStore()
